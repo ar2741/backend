@@ -26,7 +26,7 @@ export default function ReportAccess() {
 
   const [editItem, setEditItem] = useState(null);
 
-  // Handle Assign Access
+  // ✅ Assign Access
   const handleAssign = () => {
     if (!newAccess.username || !newAccess.report) return;
     const newEntry = {
@@ -38,12 +38,12 @@ export default function ReportAccess() {
     setNewAccess({ username: "", report: "", access: "View" });
   };
 
-  // Handle Delete
+  // ✅ Delete Access
   const handleDelete = (id) => {
     setReportAccessList(reportAccessList.filter((item) => item.id !== id));
   };
 
-  // Handle Edit Save
+  // ✅ Save Edited Access
   const handleEditSave = () => {
     setReportAccessList(
       reportAccessList.map((item) =>
@@ -54,121 +54,147 @@ export default function ReportAccess() {
   };
 
   return (
-    <div className="container">
-      <h2>Assign Report Access</h2>
-      <div style={{ display: "flex", gap: "10px" }}>
-        <select
-          value={newAccess.username}
-          onChange={(e) =>
-            setNewAccess({ ...newAccess, username: e.target.value })
-          }
-        >
-          <option value="">Choose a user...</option>
-          <option value="john.smith">john.smith</option>
-          <option value="priya.sharma">priya.sharma</option>
-          <option value="david.lee">david.lee</option>
-        </select>
-
-        <select
-          value={newAccess.report}
-          onChange={(e) =>
-            setNewAccess({ ...newAccess, report: e.target.value })
-          }
-        >
-          <option value="">Choose a report...</option>
-          <option value="KYC Reports">KYC Reports</option>
-          <option value="AML Reports">AML Reports</option>
-          <option value="Dormant Reports">Dormant Reports</option>
-          <option value="Active User Reports">Active User Reports</option>
-          <option value="Inactive User Reports">Inactive User Reports</option>
-        </select>
-
-        <select
-          value={newAccess.access}
-          onChange={(e) =>
-            setNewAccess({ ...newAccess, access: e.target.value })
-          }
-        >
-          <option value="View">View</option>
-          <option value="View/Download">View/Download</option>
-        </select>
-
-        <button onClick={handleAssign}>Assign Access</button>
-      </div>
-
-      <h2 style={{ marginTop: "20px" }}>Current Report Access</h2>
-      <table border="1" cellPadding="10" style={{ width: "100%" }}>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Created At</th>
-            <th>Report</th>
-            <th>Access</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reportAccessList.map((item) => (
-            <tr key={item.id}>
-              <td>{item.username}</td>
-              <td>{item.createdAt}</td>
-              <td>{item.report}</td>
-              <td>{item.access}</td>
-              <td>
-                <button onClick={() => setEditItem(item)}>EDIT</button>
-                <button onClick={() => handleDelete(item.id)}>DELETE</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Edit Popup */}
-      {editItem && (
-        <div
-          style={{
-            position: "fixed",
-            top: "30%",
-            left: "40%",
-            background: "#fff",
-            padding: "20px",
-            border: "1px solid black",
-          }}
-        >
-          <h3>Edit Access</h3>
-          <input
-            type="text"
-            value={editItem.username}
-            onChange={(e) =>
-              setEditItem({ ...editItem, username: e.target.value })
-            }
-          />
+    <div className="report-access-page">
+      {/* Assign Section */}
+      <div className="assign-section">
+        <h3>Assign Report Access</h3>
+        <div className="assign-controls">
           <select
-            value={editItem.report}
+            value={newAccess.username}
             onChange={(e) =>
-              setEditItem({ ...editItem, report: e.target.value })
+              setNewAccess({ ...newAccess, username: e.target.value })
             }
           >
+            <option value="">Choose a user...</option>
+            <option value="john.smith">john.smith</option>
+            <option value="priya.sharma">priya.sharma</option>
+            <option value="david.lee">david.lee</option>
+          </select>
+
+          <select
+            value={newAccess.report}
+            onChange={(e) =>
+              setNewAccess({ ...newAccess, report: e.target.value })
+            }
+          >
+            <option value="">Choose a report...</option>
             <option value="KYC Reports">KYC Reports</option>
             <option value="AML Reports">AML Reports</option>
             <option value="Dormant Reports">Dormant Reports</option>
             <option value="Active User Reports">Active User Reports</option>
             <option value="Inactive User Reports">Inactive User Reports</option>
           </select>
+
           <select
-            value={editItem.access}
+            value={newAccess.access}
             onChange={(e) =>
-              setEditItem({ ...editItem, access: e.target.value })
+              setNewAccess({ ...newAccess, access: e.target.value })
             }
           >
             <option value="View">View</option>
             <option value="View/Download">View/Download</option>
           </select>
-          <br />
-          <button onClick={handleEditSave}>Save</button>
-          <button onClick={() => setEditItem(null)}>Cancel</button>
+
+          <button className="btn btn-primary" onClick={handleAssign}>
+            Assign Access
+          </button>
+        </div>
+      </div>
+
+      {/* Current Access Table */}
+      <div className="current-section">
+        <h3>Current Report Access</h3>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Created At</th>
+              <th>Report</th>
+              <th>Access</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reportAccessList.map((item) => (
+              <tr key={item.id}>
+                <td>{item.username}</td>
+                <td>{item.createdAt}</td>
+                <td>{item.report}</td>
+                <td>
+                  <span className="badge bg-success">{item.access}</span>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-warning btn-sm"
+                    onClick={() => setEditItem(item)}
+                  >
+                    EDIT
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    DELETE
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Edit Popup */}
+      {editItem && (
+        <div className="modal-backdrop">
+          <div className="modal-box">
+            <h4>Edit Report Access</h4>
+
+            <input
+              type="text"
+              value={editItem.username}
+              onChange={(e) =>
+                setEditItem({ ...editItem, username: e.target.value })
+              }
+            />
+
+            <select
+              value={editItem.report}
+              onChange={(e) =>
+                setEditItem({ ...editItem, report: e.target.value })
+              }
+            >
+              <option value="KYC Reports">KYC Reports</option>
+              <option value="AML Reports">AML Reports</option>
+              <option value="Dormant Reports">Dormant Reports</option>
+              <option value="Active User Reports">Active User Reports</option>
+              <option value="Inactive User Reports">Inactive User Reports</option>
+            </select>
+
+            <select
+              value={editItem.access}
+              onChange={(e) =>
+                setEditItem({ ...editItem, access: e.target.value })
+              }
+            >
+              <option value="View">View</option>
+              <option value="View/Download">View/Download</option>
+            </select>
+
+            <div className="modal-actions">
+              <button className="btn btn-success" onClick={handleEditSave}>
+                Save
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setEditItem(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
 }
+
