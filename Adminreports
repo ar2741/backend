@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-export default function ReportAccess() {
+export default function App() {
   const [reportAccessList, setReportAccessList] = useState([
     {
       id: 1,
@@ -54,146 +55,203 @@ export default function ReportAccess() {
   };
 
   return (
-    <div className="report-access-page">
-      {/* Assign Section */}
-      <div className="assign-section">
-        <h3>Assign Report Access</h3>
-        <div className="assign-controls">
-          <select
-            value={newAccess.username}
-            onChange={(e) =>
-              setNewAccess({ ...newAccess, username: e.target.value })
-            }
-          >
-            <option value="">Choose a user...</option>
-            <option value="john.smith">john.smith</option>
-            <option value="priya.sharma">priya.sharma</option>
-            <option value="david.lee">david.lee</option>
-          </select>
+    <div className="d-flex vh-100">
+      {/* Sidebar */}
+      <div className="bg-dark text-white p-3" style={{ width: "250px" }}>
+        <h4 className="mb-4 text-center">Sidebar</h4>
+        <ul className="nav flex-column">
+          <li className="nav-item mb-2">
+            <button className="btn btn-outline-light w-100">Dashboard</button>
+          </li>
+          <li className="nav-item mb-2">
+            <button className="btn btn-outline-light w-100">Reports</button>
+          </li>
+          <li className="nav-item mb-2">
+            <button className="btn btn-outline-light w-100">Users</button>
+          </li>
+          <li className="nav-item mb-2">
+            <button className="btn btn-outline-light w-100">Settings</button>
+          </li>
+        </ul>
+      </div>
 
-          <select
-            value={newAccess.report}
-            onChange={(e) =>
-              setNewAccess({ ...newAccess, report: e.target.value })
-            }
-          >
-            <option value="">Choose a report...</option>
-            <option value="KYC Reports">KYC Reports</option>
-            <option value="AML Reports">AML Reports</option>
-            <option value="Dormant Reports">Dormant Reports</option>
-            <option value="Active User Reports">Active User Reports</option>
-            <option value="Inactive User Reports">Inactive User Reports</option>
-          </select>
-
-          <select
-            value={newAccess.access}
-            onChange={(e) =>
-              setNewAccess({ ...newAccess, access: e.target.value })
-            }
-          >
-            <option value="View">View</option>
-            <option value="View/Download">View/Download</option>
-          </select>
-
-          <button className="btn btn-primary" onClick={handleAssign}>
-            Assign Access
-          </button>
+      {/* Main Content */}
+      <div className="flex-grow-1 bg-light">
+        {/* Topbar */}
+        <div className="bg-white shadow-sm p-3 d-flex justify-content-between">
+          <h5 className="mb-0">Report Access Management</h5>
+          <button className="btn btn-primary">Logout</button>
         </div>
-      </div>
 
-      {/* Current Access Table */}
-      <div className="current-section">
-        <h3>Current Report Access</h3>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Created At</th>
-              <th>Report</th>
-              <th>Access</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reportAccessList.map((item) => (
-              <tr key={item.id}>
-                <td>{item.username}</td>
-                <td>{item.createdAt}</td>
-                <td>{item.report}</td>
-                <td>
-                  <span className="badge bg-success">{item.access}</span>
-                </td>
-                <td>
-                  <button
-                    className="btn btn-warning btn-sm"
-                    onClick={() => setEditItem(item)}
-                  >
-                    EDIT
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    DELETE
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Edit Popup */}
-      {editItem && (
-        <div className="modal-backdrop">
-          <div className="modal-box">
-            <h4>Edit Report Access</h4>
-
-            <input
-              type="text"
-              value={editItem.username}
-              onChange={(e) =>
-                setEditItem({ ...editItem, username: e.target.value })
-              }
-            />
-
-            <select
-              value={editItem.report}
-              onChange={(e) =>
-                setEditItem({ ...editItem, report: e.target.value })
-              }
-            >
-              <option value="KYC Reports">KYC Reports</option>
-              <option value="AML Reports">AML Reports</option>
-              <option value="Dormant Reports">Dormant Reports</option>
-              <option value="Active User Reports">Active User Reports</option>
-              <option value="Inactive User Reports">Inactive User Reports</option>
-            </select>
-
-            <select
-              value={editItem.access}
-              onChange={(e) =>
-                setEditItem({ ...editItem, access: e.target.value })
-              }
-            >
-              <option value="View">View</option>
-              <option value="View/Download">View/Download</option>
-            </select>
-
-            <div className="modal-actions">
-              <button className="btn btn-success" onClick={handleEditSave}>
-                Save
-              </button>
-              <button
-                className="btn btn-secondary"
-                onClick={() => setEditItem(null)}
+        {/* Page Content */}
+        <div className="p-4">
+          {/* Assign Section */}
+          <div className="mb-4">
+            <h3>Assign Report Access</h3>
+            <div className="d-flex gap-2 flex-wrap">
+              <select
+                className="form-select"
+                style={{ width: "200px" }}
+                value={newAccess.username}
+                onChange={(e) =>
+                  setNewAccess({ ...newAccess, username: e.target.value })
+                }
               >
-                Cancel
+                <option value="">Choose a user...</option>
+                <option value="john.smith">john.smith</option>
+                <option value="priya.sharma">priya.sharma</option>
+                <option value="david.lee">david.lee</option>
+              </select>
+
+              <select
+                className="form-select"
+                style={{ width: "200px" }}
+                value={newAccess.report}
+                onChange={(e) =>
+                  setNewAccess({ ...newAccess, report: e.target.value })
+                }
+              >
+                <option value="">Choose a report...</option>
+                <option value="KYC Reports">KYC Reports</option>
+                <option value="AML Reports">AML Reports</option>
+                <option value="Dormant Reports">Dormant Reports</option>
+                <option value="Active User Reports">Active User Reports</option>
+                <option value="Inactive User Reports">
+                  Inactive User Reports
+                </option>
+              </select>
+
+              <select
+                className="form-select"
+                style={{ width: "200px" }}
+                value={newAccess.access}
+                onChange={(e) =>
+                  setNewAccess({ ...newAccess, access: e.target.value })
+                }
+              >
+                <option value="View">View</option>
+                <option value="View/Download">View/Download</option>
+              </select>
+
+              <button className="btn btn-success" onClick={handleAssign}>
+                Assign Access
               </button>
             </div>
           </div>
+
+          {/* Current Access Table */}
+          <div>
+            <h3>Current Report Access</h3>
+            <table className="table table-striped table-bordered mt-3">
+              <thead className="table-dark">
+                <tr>
+                  <th>Username</th>
+                  <th>Created At</th>
+                  <th>Report</th>
+                  <th>Access</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reportAccessList.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.username}</td>
+                    <td>{item.createdAt}</td>
+                    <td>{item.report}</td>
+                    <td>
+                      <span className="badge bg-success">{item.access}</span>
+                    </td>
+                    <td className="d-flex gap-2">
+                      <button
+                        className="btn btn-warning btn-sm w-100"
+                        onClick={() => setEditItem(item)}
+                      >
+                        EDIT
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm w-100"
+                        onClick={() => handleDelete(item.id)}
+                      >
+                        DELETE
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Edit Popup */}
+          {editItem && (
+            <div
+              className="modal d-block"
+              style={{ background: "rgba(0,0,0,0.5)" }}
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Edit Report Access</h5>
+                    <button
+                      className="btn-close"
+                      onClick={() => setEditItem(null)}
+                    ></button>
+                  </div>
+                  <div className="modal-body d-flex flex-column gap-2">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={editItem.username}
+                      onChange={(e) =>
+                        setEditItem({ ...editItem, username: e.target.value })
+                      }
+                    />
+
+                    <select
+                      className="form-select"
+                      value={editItem.report}
+                      onChange={(e) =>
+                        setEditItem({ ...editItem, report: e.target.value })
+                      }
+                    >
+                      <option value="KYC Reports">KYC Reports</option>
+                      <option value="AML Reports">AML Reports</option>
+                      <option value="Dormant Reports">Dormant Reports</option>
+                      <option value="Active User Reports">
+                        Active User Reports
+                      </option>
+                      <option value="Inactive User Reports">
+                        Inactive User Reports
+                      </option>
+                    </select>
+
+                    <select
+                      className="form-select"
+                      value={editItem.access}
+                      onChange={(e) =>
+                        setEditItem({ ...editItem, access: e.target.value })
+                      }
+                    >
+                      <option value="View">View</option>
+                      <option value="View/Download">View/Download</option>
+                    </select>
+                  </div>
+                  <div className="modal-footer">
+                    <button className="btn btn-success" onClick={handleEditSave}>
+                      Save
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => setEditItem(null)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
