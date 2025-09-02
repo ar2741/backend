@@ -1,0 +1,174 @@
+import React, { useState } from "react";
+
+export default function ReportAccess() {
+  const [reportAccessList, setReportAccessList] = useState([
+    {
+      id: 1,
+      username: "john.smith",
+      createdAt: "2025-08-20",
+      report: "KYC Reports",
+      access: "View",
+    },
+    {
+      id: 2,
+      username: "priya.sharma",
+      createdAt: "2025-08-19",
+      report: "AML Reports",
+      access: "View/Download",
+    },
+  ]);
+
+  const [newAccess, setNewAccess] = useState({
+    username: "",
+    report: "",
+    access: "View",
+  });
+
+  const [editItem, setEditItem] = useState(null);
+
+  // Handle Assign Access
+  const handleAssign = () => {
+    if (!newAccess.username || !newAccess.report) return;
+    const newEntry = {
+      id: Date.now(),
+      ...newAccess,
+      createdAt: new Date().toISOString().split("T")[0],
+    };
+    setReportAccessList([...reportAccessList, newEntry]);
+    setNewAccess({ username: "", report: "", access: "View" });
+  };
+
+  // Handle Delete
+  const handleDelete = (id) => {
+    setReportAccessList(reportAccessList.filter((item) => item.id !== id));
+  };
+
+  // Handle Edit Save
+  const handleEditSave = () => {
+    setReportAccessList(
+      reportAccessList.map((item) =>
+        item.id === editItem.id ? editItem : item
+      )
+    );
+    setEditItem(null);
+  };
+
+  return (
+    <div className="container">
+      <h2>Assign Report Access</h2>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <select
+          value={newAccess.username}
+          onChange={(e) =>
+            setNewAccess({ ...newAccess, username: e.target.value })
+          }
+        >
+          <option value="">Choose a user...</option>
+          <option value="john.smith">john.smith</option>
+          <option value="priya.sharma">priya.sharma</option>
+          <option value="david.lee">david.lee</option>
+        </select>
+
+        <select
+          value={newAccess.report}
+          onChange={(e) =>
+            setNewAccess({ ...newAccess, report: e.target.value })
+          }
+        >
+          <option value="">Choose a report...</option>
+          <option value="KYC Reports">KYC Reports</option>
+          <option value="AML Reports">AML Reports</option>
+          <option value="Dormant Reports">Dormant Reports</option>
+          <option value="Active User Reports">Active User Reports</option>
+          <option value="Inactive User Reports">Inactive User Reports</option>
+        </select>
+
+        <select
+          value={newAccess.access}
+          onChange={(e) =>
+            setNewAccess({ ...newAccess, access: e.target.value })
+          }
+        >
+          <option value="View">View</option>
+          <option value="View/Download">View/Download</option>
+        </select>
+
+        <button onClick={handleAssign}>Assign Access</button>
+      </div>
+
+      <h2 style={{ marginTop: "20px" }}>Current Report Access</h2>
+      <table border="1" cellPadding="10" style={{ width: "100%" }}>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Created At</th>
+            <th>Report</th>
+            <th>Access</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reportAccessList.map((item) => (
+            <tr key={item.id}>
+              <td>{item.username}</td>
+              <td>{item.createdAt}</td>
+              <td>{item.report}</td>
+              <td>{item.access}</td>
+              <td>
+                <button onClick={() => setEditItem(item)}>EDIT</button>
+                <button onClick={() => handleDelete(item.id)}>DELETE</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Edit Popup */}
+      {editItem && (
+        <div
+          style={{
+            position: "fixed",
+            top: "30%",
+            left: "40%",
+            background: "#fff",
+            padding: "20px",
+            border: "1px solid black",
+          }}
+        >
+          <h3>Edit Access</h3>
+          <input
+            type="text"
+            value={editItem.username}
+            onChange={(e) =>
+              setEditItem({ ...editItem, username: e.target.value })
+            }
+          />
+          <select
+            value={editItem.report}
+            onChange={(e) =>
+              setEditItem({ ...editItem, report: e.target.value })
+            }
+          >
+            <option value="KYC Reports">KYC Reports</option>
+            <option value="AML Reports">AML Reports</option>
+            <option value="Dormant Reports">Dormant Reports</option>
+            <option value="Active User Reports">Active User Reports</option>
+            <option value="Inactive User Reports">Inactive User Reports</option>
+          </select>
+          <select
+            value={editItem.access}
+            onChange={(e) =>
+              setEditItem({ ...editItem, access: e.target.value })
+            }
+          >
+            <option value="View">View</option>
+            <option value="View/Download">View/Download</option>
+          </select>
+          <br />
+          <button onClick={handleEditSave}>Save</button>
+          <button onClick={() => setEditItem(null)}>Cancel</button>
+        </div>
+      )}
+    </div>
+  );
+}
